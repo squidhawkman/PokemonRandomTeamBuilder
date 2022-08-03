@@ -37,6 +37,11 @@ genIVcheckbox.addEventListener('click', function () {
     genChecker['GenIV']['checkedStatus'] = this.checked;
     resetButSaveTeams();
 })
+const genVcheckbox = document.querySelector('#GenVcheckbox');
+genVcheckbox.addEventListener('click', function () {
+    genChecker['GenV']['checkedStatus'] = this.checked;
+    resetButSaveTeams();
+})
 
 
 const genChecker = {
@@ -59,13 +64,18 @@ const genChecker = {
         checkedStatus: genIVcheckbox.checked,
         firstPoke: 387,
         lastPoke: 493
+    },
+    GenV: {
+        checkedStatus: genVcheckbox.checked,
+        firstPoke: 494,
+        lastPoke: 649 
     }
 };
 
 
 //default is gens I-IV
 function generateRandPokeNum() {
-    let num = Math.floor(Math.random() * genChecker['GenIV']['lastPoke'] + genChecker['GenI']['firstPoke']);
+    let num = Math.floor(Math.random() * genChecker['GenV']['lastPoke'] + genChecker['GenI']['firstPoke']);
 
     //checking to make sure the pokemon is within a selected generation (if not, generate new random number)
     for (gen of Object.values(genChecker)) {
@@ -89,6 +99,7 @@ let generatedPokemon = [];
 const saveTeamButton = document.querySelector('#saveTeam');
 saveTeamButton.disabled = true;
 
+
 //scrapping the team and making a new one
 const newTeamButton = document.querySelector('#clearTeam');
 newTeamButton.addEventListener('click', function () {
@@ -101,6 +112,7 @@ newTeamButton.disabled = true;
 const newTeamHeader = document.querySelector('#newTeamHeader');
 const savedTeamsHeader = document.querySelector('#savedTeamsHeader');
 savedTeamsHeader.style.visibility = 'hidden';
+
 
 //the slider 
 const chooseFromSlider = document.querySelector('#slider');
@@ -120,7 +132,6 @@ chooseFromSlider.addEventListener('change', function () {
 //this should be something that does not change when the page refreshes/changes. Is this done with React components? Is this done with state?
 
 const customizer = {
-    Gens: ['GenI', 'GenII', 'GenIII', 'GenIV'],
     Types: ['water', 'fire', 'normal', 'grass', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy'],
     Shiny: false
 }
