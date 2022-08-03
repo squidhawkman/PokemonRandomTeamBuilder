@@ -8,11 +8,78 @@ const baseURLshiny = 'Shinies/'
 //Gen II 152-251
 //Gen III 252-386
 //Gen IV 387-493
+// const genPokeNums = {
+//     GenI: [1, 151],
+//     GenII: [152, 251],
+//     GenIII: [252, 386],
+//     GenIV: [387, 493]
+// }
+
+//choosing the generations
+const genIcheckbox = document.querySelector('#GenIcheckbox');
+genIcheckbox.addEventListener('click', function() {
+    genChecker['GenI']['checkedStatus'] = this.checked;
+})
+const genIIcheckbox = document.querySelector('#GenIIcheckbox');
+genIIcheckbox.addEventListener('click', function() {
+    genChecker['GenII']['checkedStatus'] = this.checked;
+})
+const genIIIcheckbox = document.querySelector('#GenIIIcheckbox');
+genIIIcheckbox.addEventListener('click', function() {
+    genChecker['GenIII']['checkedStatus'] = this.checked;
+})
+const genIVcheckbox = document.querySelector('#GenIVcheckbox');
+genIVcheckbox.addEventListener('click', function() {
+    genChecker['GenIV']['checkedStatus'] = this.checked;
+})
+
+
+const genChecker = {
+    GenI: {
+        checkedStatus: genIcheckbox.checked,
+        firstPoke: 1,
+        lastPoke: 151
+    },
+    GenII: {
+        checkedStatus: genIIcheckbox.checked,
+        firstPoke: 152,
+        lastPoke: 251
+    },
+    GenIII: {
+        checkedStatus: genIIIcheckbox.checked,
+        firstPoke: 252,
+        lastPoke: 386
+    },
+    GenIV: {
+        checkedStatus: genIVcheckbox.checked,
+        firstPoke: 387,
+        lastPoke: 493
+    }
+};
+
+
 
 //default is gens I-IV
-function generateRandPokeNum(fromPokeNum = 1, toPokeNum = 493, type) {
-    return Math.floor(Math.random() * toPokeNum + fromPokeNum);
+function generateRandPokeNum() {
+    let num = Math.floor(Math.random() * genChecker['GenIV']['lastPoke'] + genChecker['GenI']['firstPoke']);
+
+    //checking to make sure the pokemon is within a selected generation
+    for (gen of Object.values(genChecker)) {
+        console.log(gen['checkedStatus']);
+        console.log(num);
+        if (!gen['checkedStatus']) {
+            if (num >= gen['firstPoke'] && num <= gen['lastPoke']) {
+               return generateRandPokeNum();
+            }
+        }
+    }
+    return num;
 }
+
+console.log(generateRandPokeNum());
+
+    
+
 
 
 //keeping track of what pokemon have been generated (so there are not repeats)
@@ -34,15 +101,14 @@ const chooseFromSlider = document.querySelector('#slider');
 const sliderDisplayNum = document.querySelector('#sliderDisplayNum');
 let pokemansNumber = chooseFromSlider.value;
 sliderDisplayNum.innerText = chooseFromSlider.value;
-chooseFromSlider.addEventListener('input', function() {
+chooseFromSlider.addEventListener('input', function () {
     sliderDisplayNum.innerText = this.value;
     pokemansNumber = this.value;
 })
-chooseFromSlider.addEventListener('change', function() {
+chooseFromSlider.addEventListener('change', function () {
     fullReset();
     generatePokemon();
 })
-
 
 
 //object that allows user to customize team picker
@@ -53,6 +119,8 @@ const customizer = {
     Types: ['water', 'fire', 'normal', 'grass', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy'],
     Shiny: false
 }
+
+
 
 
 //the Pokemon (I will get their data by fetching it from PokeAPI, James Q Quick has a guide on this that you favorited)
@@ -89,7 +157,6 @@ function generatePokemon() {
             chosenPoke.append(randPokeImg);
             newTeamList.append(chosenPoke);
             generatedPokemonContainer.innerHTML = '';
-            console.log(newTeamList.childElementCount);
             if (newTeamList.childElementCount === 6) {
                 saveTeamButton.disabled = false;
             }
@@ -98,18 +165,20 @@ function generatePokemon() {
             };
             newTeamHeader.innerText = 'New Team';
         })
-        let randPokeNum = generateRandPokeNum(1, 151);
+        let randPokeNum = generateRandPokeNum();
+
+
         //Normal or shiny?
         if (!customizer.Shiny) {
             randPokeImg.src = `${baseURL}${randPokeNum}.png`;
             while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-                randPokeNum = generateRandPokeNum(1, 151);
+                randPokeNum = generateRandPokeNum();
                 randPokeImg.src = `${baseURL}${randPokeNum}.png`;
             }
         } else {
             randPokeImg.src = `${baseURLshiny}${randPokeNum}.png`;
             while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-                randPokeNum = generateRandPokeNum(1, 151);
+                randPokeNum = generateRandPokeNum();
                 randPokeImg.src = `${baseURLshiny}${randPokeNum}.png`;
             }
         }
@@ -139,7 +208,7 @@ function fullReset() {
 //saving the team
 //could include option to name team
 const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
-saveTeamButton.addEventListener('click', function() {
+saveTeamButton.addEventListener('click', function () {
     const newSavedTeam = document.createElement('ul');
     for (const listItem of newTeamList.querySelectorAll('li')) {
         newSavedTeam.append(listItem.querySelector('img'));
@@ -152,7 +221,7 @@ saveTeamButton.addEventListener('click', function() {
 
 //scrapping the team and making a new one
 const newTeamButton = document.querySelector('#clearTeam');
-newTeamButton.addEventListener('click', function() {
+newTeamButton.addEventListener('click', function () {
     fullReset();
     generatePokemon();
 });

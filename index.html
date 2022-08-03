@@ -17,10 +17,28 @@
         <button id="saveTeam">Save Team</button>
         <button id="clearTeam">Scrap Team</button>
         <button id="shinyButton">Shinies?</button>
-        <div class="slidecontainer">
+        <div id="slideContainer">
             <label for="chooseFrom">Choose from <span id="sliderDisplayNum">4</span> Pokemans</label>
             <input name="chooseFrom" type="range" min="2" max="10" value="4" id="slider">
           </div>
+          <form id="genCheckboxesContainer">
+            <div>
+                <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI" id="GenIcheckbox">
+                <label for="genI">Gen I</label>
+            </div>
+            <div>
+                <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII" id="GenIIcheckbox">
+                <label for="genII">Gen II</label>
+            </div>
+            <div>
+                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII" id="GenIIIcheckbox">
+                <label for="genIII">Gen III</label>
+            </div>
+            <div>
+                <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV" id="GenIVcheckbox">
+                <label for="genI">Gen IV</label>
+            </div>
+        </form>
         <!-- <div id="typeButtons">
             <button id="normal">Normal</button>
             <button id="fire">Fire</button>
