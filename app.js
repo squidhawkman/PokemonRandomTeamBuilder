@@ -89,6 +89,13 @@ let generatedPokemon = [];
 const saveTeamButton = document.querySelector('#saveTeam');
 saveTeamButton.disabled = true;
 
+//scrapping the team and making a new one
+const newTeamButton = document.querySelector('#clearTeam');
+newTeamButton.addEventListener('click', function () {
+    resetButSaveTeams();
+});
+newTeamButton.disabled = true;
+
 
 //having header hidden while empty
 const newTeamHeader = document.querySelector('#newTeamHeader');
@@ -155,9 +162,11 @@ function generatePokemon() {
             chosenPoke.append(randPokeImg);
             newTeamList.append(chosenPoke);
             generatedPokemonContainer.innerHTML = '';
+            newTeamHeader.innerText = 'New Team';
+            newTeamButton.disabled = false;
             if (newTeamList.childElementCount === 6) {
                 saveTeamButton.disabled = false;
-
+                newTeamHeader.innerText = 'Sexy!!!';
                 //attempting to remove click event - success!!
                 for (const listItem of newTeamList.querySelectorAll('li')) {
                     listItem.querySelector('img').replaceWith(listItem.querySelector('img').cloneNode());
@@ -166,7 +175,6 @@ function generatePokemon() {
             if (newTeamList.childElementCount < 6) {
                 generatePokemon();
             };
-            newTeamHeader.innerText = 'New Team';
         })
         let randPokeNum = generateRandPokeNum();
 
@@ -199,6 +207,8 @@ function resetButSaveTeams() {
     newTeamList.innerHTML = '';
     generatedPokemon = [];
     newTeamHeader.innerText = 'Build a team?';
+    saveTeamButton.disabled = true;
+    newTeamButton.disabled = true;
     generatePokemon();
 }
 
@@ -222,12 +232,6 @@ saveTeamButton.addEventListener('click', function () {
     }
     savedTeamsContainer.append(newSavedTeam);
     savedTeamsHeader.style.visibility = 'visible';
-    resetButSaveTeams();
-});
-
-//scrapping the team and making a new one
-const newTeamButton = document.querySelector('#clearTeam');
-newTeamButton.addEventListener('click', function () {
     resetButSaveTeams();
 });
 
