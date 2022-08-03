@@ -15,22 +15,27 @@ const baseURLshiny = 'Shinies/'
 //     GenIV: [387, 493]
 // }
 
+
 //choosing the generations
 const genIcheckbox = document.querySelector('#GenIcheckbox');
-genIcheckbox.addEventListener('click', function() {
+genIcheckbox.addEventListener('click', function () {
     genChecker['GenI']['checkedStatus'] = this.checked;
+    resetButSaveTeams();
 })
 const genIIcheckbox = document.querySelector('#GenIIcheckbox');
-genIIcheckbox.addEventListener('click', function() {
+genIIcheckbox.addEventListener('click', function () {
     genChecker['GenII']['checkedStatus'] = this.checked;
+    resetButSaveTeams();
 })
 const genIIIcheckbox = document.querySelector('#GenIIIcheckbox');
-genIIIcheckbox.addEventListener('click', function() {
+genIIIcheckbox.addEventListener('click', function () {
     genChecker['GenIII']['checkedStatus'] = this.checked;
+    resetButSaveTeams();
 })
 const genIVcheckbox = document.querySelector('#GenIVcheckbox');
-genIVcheckbox.addEventListener('click', function() {
+genIVcheckbox.addEventListener('click', function () {
     genChecker['GenIV']['checkedStatus'] = this.checked;
+    resetButSaveTeams();
 })
 
 
@@ -58,28 +63,22 @@ const genChecker = {
 };
 
 
-
 //default is gens I-IV
 function generateRandPokeNum() {
     let num = Math.floor(Math.random() * genChecker['GenIV']['lastPoke'] + genChecker['GenI']['firstPoke']);
 
-    //checking to make sure the pokemon is within a selected generation
+    //checking to make sure the pokemon is within a selected generation (if not, generate new random number)
     for (gen of Object.values(genChecker)) {
         console.log(gen['checkedStatus']);
         console.log(num);
         if (!gen['checkedStatus']) {
             if (num >= gen['firstPoke'] && num <= gen['lastPoke']) {
-               return generateRandPokeNum();
+                return generateRandPokeNum();
             }
         }
     }
     return num;
 }
-
-console.log(generateRandPokeNum());
-
-    
-
 
 
 //keeping track of what pokemon have been generated (so there are not repeats)
@@ -106,8 +105,7 @@ chooseFromSlider.addEventListener('input', function () {
     pokemansNumber = this.value;
 })
 chooseFromSlider.addEventListener('change', function () {
-    fullReset();
-    generatePokemon();
+    resetButSaveTeams();
 })
 
 
@@ -159,6 +157,11 @@ function generatePokemon() {
             generatedPokemonContainer.innerHTML = '';
             if (newTeamList.childElementCount === 6) {
                 saveTeamButton.disabled = false;
+
+                //attempting to remove click event - success!!
+                for (const listItem of newTeamList.querySelectorAll('li')) {
+                    listItem.querySelector('img').replaceWith(listItem.querySelector('img').cloneNode());
+                }  
             }
             if (newTeamList.childElementCount < 6) {
                 generatePokemon();
@@ -188,21 +191,23 @@ function generatePokemon() {
     }
 }
 
-//generate first set
-generatePokemon();
+
 
 //reset functions
 function resetButSaveTeams() {
-    newTeamList.innerHTML = '';
-    generatedPokemon = [];
-    newTeamHeader.innerText = 'Build a team?';
-}
-
-function fullReset() {
     generatedPokemonContainer.innerHTML = '';
     newTeamList.innerHTML = '';
     generatedPokemon = [];
     newTeamHeader.innerText = 'Build a team?';
+    generatePokemon();
+}
+
+
+//put this on a clear all teams button
+function clearSavedTeams() {
+    resetButSaveTeams();
+    savedTeamsContainer.innerHTML = '';
+    generatePokemon();
 }
 
 //saving the team
@@ -211,24 +216,25 @@ const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
 saveTeamButton.addEventListener('click', function () {
     const newSavedTeam = document.createElement('ul');
     for (const listItem of newTeamList.querySelectorAll('li')) {
+
+
         newSavedTeam.append(listItem.querySelector('img'));
     }
     savedTeamsContainer.append(newSavedTeam);
     savedTeamsHeader.style.visibility = 'visible';
     resetButSaveTeams();
-    generatePokemon();
 });
 
 //scrapping the team and making a new one
 const newTeamButton = document.querySelector('#clearTeam');
 newTeamButton.addEventListener('click', function () {
-    fullReset();
-    generatePokemon();
+    resetButSaveTeams();
 });
 
 
 
-
+//generate first set
+generatePokemon();
 
 
 
