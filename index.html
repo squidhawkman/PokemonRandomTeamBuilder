@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,39 +8,44 @@
     <link rel="stylesheet" href="styles.css">
     <title>Pokemon Sprites</title>
 </head>
+
 <body>
     <section id="generatedPokemonContainer"></section>
     <div>
         <h2 id="newTeamHeader">Build a new team?</h2>
         <section id="newTeamContainer"></section>
         <button id="saveTeam">Save Team</button>
-    <button id="clearTeam">Scrap Team</button>
-    <button id="shinyButton">Shinies?</button>
-    <div id="typeButtons">
-        <button id="normal">Normal</button>
-        <button id="fire">Fire</button>
-        <button id="water">Water</button>
-        <button id="grass">Grass</button>
-        <button id="flying">Flying</button>
-        <button id="fighting">Fighting</button>
-        <button id="poison">Poison</button>
-        <button id="electric">Electric</button>
-        <button id="ground">Ground</button>
-        <button id="rock">Rock</button>
-        <button id="psychic">Psychic</button>
-        <button id="ice">Ice</button>
-        <button id="bug">Bug</button>
-        <button id="ghost">Ghost</button>
-        <button id="steel">Steel</button>
-        <button id="dragon">Dragon</button>
-        <button id="dark">Dark</button>
-        <button id="fairy">Fairy</button>
-
-    </div>
+        <button id="clearTeam">Scrap Team</button>
+        <button id="shinyButton">Shinies?</button>
+        <div class="slidecontainer">
+            <label for="chooseFrom">Choose from <span id="sliderDisplayNum">4</span> Pokemans</label>
+            <input name="chooseFrom" type="range" min="2" max="10" value="4" id="slider">
+          </div>
+        <!-- <div id="typeButtons">
+            <button id="normal">Normal</button>
+            <button id="fire">Fire</button>
+            <button id="water">Water</button>
+            <button id="grass">Grass</button>
+            <button id="flying">Flying</button>
+            <button id="fighting">Fighting</button>
+            <button id="poison">Poison</button>
+            <button id="electric">Electric</button>
+            <button id="ground">Ground</button>
+            <button id="rock">Rock</button>
+            <button id="psychic">Psychic</button>
+            <button id="ice">Ice</button>
+            <button id="bug">Bug</button>
+            <button id="ghost">Ghost</button>
+            <button id="steel">Steel</button>
+            <button id="dragon">Dragon</button>
+            <button id="dark">Dark</button>
+            <button id="fairy">Fairy</button>
+        </div> -->
         <h2 id="savedTeamsHeader">Your Teams</h2>
         <section id="savedTeamsContainer"></section>
     </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>
