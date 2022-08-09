@@ -148,12 +148,13 @@ const generateArrayOfPossiblePokemon = async () => {
     return possiblePokemon;
 }
 
-
+//saving that array of possible Pokemon as a variable?
+let possiblePokemonArr = generateArrayOfPossiblePokemon();
 
 async function generateRandPokeNum() {
-    const possiblePokemonArr = await generateArrayOfPossiblePokemon();
-    let num = Math.floor(Math.random() * possiblePokemonArr.length);
-    return possiblePokemonArr[num];
+    const arr = await possiblePokemonArr;
+    let num = Math.floor(Math.random() * arr.length);
+    return arr[num];
 }
 
 
