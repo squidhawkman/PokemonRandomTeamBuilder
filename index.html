@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Pokemon Sprites</title>
 </head>
 
@@ -23,23 +24,23 @@
           </div>
           <form id="genCheckboxesContainer">
             <div>
-                <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI" id="GenIcheckbox">
+                <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI" id="Gen1checkbox">
                 <label for="genI">Gen I</label>
             </div>
             <div>
-                <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII" id="GenIIcheckbox">
+                <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII" id="Gen2checkbox">
                 <label for="genII">Gen II</label>
             </div>
             <div>
-                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII" id="GenIIIcheckbox">
+                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII" id="Gen3checkbox">
                 <label for="genIII">Gen III</label>
             </div>
             <div>
-                <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV" id="GenIVcheckbox">
+                <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV" id="Gen4checkbox">
                 <label for="genIV">Gen IV</label>
             </div>
             <div>
-                <input checked="true" value="GenV" class="GenCheckbox" type="checkbox" name="genV" id="GenVcheckbox">
+                <input checked="true" value="GenV" class="GenCheckbox" type="checkbox" name="genV" id="Gen5checkbox">
                 <label for="genV">Gen V</label>
             </div>
         </form>
@@ -65,6 +66,10 @@
         </div> -->
         <h2 id="savedTeamsHeader">Your Teams</h2>
         <section id="savedTeamsContainer"></section>
+        <div id="jokeTwoTellsAJoke">
+            <p id="theJoke"></p>
+        <img id="jokeTwo" src="ClassicSprites/150.png" alt="Mewtwo telling a joke.">
+        </div>
     </div>
 
     <script src="app.js"></script>
