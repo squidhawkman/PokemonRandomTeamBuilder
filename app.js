@@ -44,7 +44,6 @@ newJoke();
 const generatedPokemonContainer = document.querySelector('#generatedPokemonContainer');
 const baseURL = 'ClassicSprites/';
 const baseURLshiny = 'Shinies/';
-let possiblePokemon = [];
 
 
 //handling the checkboxes (can I do this part with a loop?)
@@ -99,13 +98,29 @@ applyClickEventOnGenCheckboxes();
 
 //where user customize choices are stored
 const customizer = {
-    FilterTypes: [],
+    FilterTypes: ['water', 'grass', 'fire'],
     Shiny: false
 }
 
+//returns array of types of a pokemon 
+const getPokemonTypes = async (pokeNum) => {
+    try {
+        const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeNum}`);
+        const types = [];
+        types.push(pokeData.data.types[0].type.name);
+        if (pokeData.data.types[1]) {
+            types.push(pokeData.data.types[1].type.name);
+        };
+        return types;
+    } catch (e) {
+        return e;
+    }
+}
+
+
 //generating the array of possible Pokemon (to be shown as options)
-const generateArrayOfPossiblePokemon = () => {
-    possiblePokemon = [];
+const generateArrayOfPossiblePokemon = async () => {
+    let possiblePokemon = [];
     for (gen of Object.values(genChecker)) {
         if (gen['checkedStatus']) {
             for (let i = gen['firstPoke']; i <= gen['lastPoke']; i++) {
@@ -113,19 +128,32 @@ const generateArrayOfPossiblePokemon = () => {
             }
         }
     }
-    // if (customizer.FilterTypes.length > 0) {
-    //this is where you will create the new array with matching types
+    const newPossiblePokemon = [];
+    if (customizer.FilterTypes.length > 0) { 
+        for (let i = 0; i <= 8; i++) {
+            const pokemon = possiblePokemon[i];
+            const pokemonTypes = await getPokemonTypes(pokemon);
+            const selectedTypes = customizer.FilterTypes;
+
+            if (selectedTypes.indexOf(pokemonTypes[0]) !== -1 || selectedTypes.indexOf(pokemonTypes[1]) !== -1) {
+                newPossiblePokemon.push(pokemon);
+            }
+        }
+    }
+    console.log(newPossiblePokemon.length)
+    if (newPossiblePokemon.length > 0) {
+        possiblePokemon = newPossiblePokemon;
+        return newPossiblePokemon;
+    }
+    return possiblePokemon;
 }
 
 
-//generating initial array of possible pokemon by gen and type
-generateArrayOfPossiblePokemon();
 
-
-//default is all checked gens
-function generateRandPokeNum() {
-    let num = Math.floor(Math.random() * possiblePokemon.length);
-    return possiblePokemon[num];
+async function generateRandPokeNum() {
+    const possiblePokemonArr = await generateArrayOfPossiblePokemon();
+    let num = Math.floor(Math.random() * possiblePokemonArr.length);
+    return possiblePokemonArr[num];
 }
 
 
@@ -171,17 +199,8 @@ chooseFromSlider.addEventListener('change', function () {
 //Activating shinies button
 const shinyButton = document.querySelector('#shinyButton');
 shinyButton.addEventListener('click', function () {
-    if (this.innerText === 'Shinies?') {
-        this.innerText = 'Shinies!';
-    } else {
-        this.innerText = 'Shinies?';
-    }
-    if (customizer.Shiny) {
-        customizer.Shiny = false;
-    } else {
-        customizer.Shiny = true;
-    }
-    resetButSaveTeams();
+    this.innerText === 'Shinies?' ? this.innerText = 'Shinies!' : this.innerText = 'Shinies?';
+    !!customizer.Shiny ? customizer.Shiny = false : customizer.Shiny = true;
 })
 
 //making a ul for the first team
@@ -190,7 +209,7 @@ const newTeamContainer = document.querySelector('#newTeamContainer');
 newTeamContainer.append(newTeamList);
 
 //random Pokemon generator
-function generatePokemon() {
+async function generatePokemon() {
     //generating the Pokemon
     for (let i = 1; i <= sliderValue; i++) {
         let randPokeImg = document.createElement('img');
@@ -211,11 +230,11 @@ function generatePokemon() {
                 }
             }
             if (newTeamList.childElementCount < 6) {
-                generatePokemon();
+               generatePokemon();
             };
         })
-        let randPokeNum = generateRandPokeNum();
-        
+        let randPokeNum = await generateRandPokeNum();
+
         //if no gens are selected (this saves us from an infinite loop)
         if (randPokeNum === undefined) {
             return console.log('Select a generation.');
@@ -228,11 +247,11 @@ function generatePokemon() {
             spriteURL = baseURLshiny;
         }
         randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
-            while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-                randPokeNum = generateRandPokeNum();
-                randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
-            }
-        
+        while (generatedPokemon.indexOf(randPokeNum) !== -1) {
+            randPokeNum = await generateRandPokeNum();
+            randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
+        }
+
         //adding the pokemon to the container to be chosen from
         generatedPokemon.push(randPokeNum);
         generatedPokemonContainer.append(randPokeImg);
@@ -242,24 +261,22 @@ function generatePokemon() {
 
 
 //reset functions
-function resetButSaveTeams() {
+async function resetButSaveTeams() {
     generatedPokemonContainer.innerHTML = '';
     newTeamList.innerHTML = '';
     generatedPokemon = [];
     newTeamHeader.innerText = 'Build a team?';
     saveTeamButton.disabled = true;
     newTeamButton.disabled = true;
-    generateArrayOfPossiblePokemon();
-    generatePokemon();
+    await generatePokemon();
 }
 
 
 //put this on a clear all teams button
-function clearSavedTeams() {
-    resetButSaveTeams();
+async function clearSavedTeams() {
+   await resetButSaveTeams();
     savedTeamsContainer.innerHTML = '';
-    generateArrayOfPossiblePokemon();
-    generatePokemon();
+   await generatePokemon();
 }
 
 //saving the team
@@ -268,8 +285,6 @@ const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
 saveTeamButton.addEventListener('click', function () {
     const newSavedTeam = document.createElement('ul');
     for (const listItem of newTeamList.querySelectorAll('li')) {
-
-
         newSavedTeam.append(listItem.querySelector('img'));
     }
     savedTeamsContainer.append(newSavedTeam);
