@@ -42,45 +42,17 @@ newJoke();
 
 //some variables
 const generatedPokemonContainer = document.querySelector('#generatedPokemonContainer');
-const baseURL = 'ClassicSprites/'
-const baseURLshiny = 'Shinies/'
+const baseURL = 'ClassicSprites/';
+const baseURLshiny = 'Shinies/';
 let possiblePokemon = [];
 
 
-
-
-
-//choosing the generations
-
-
-
+//handling the checkboxes (can I do this part with a loop?)
 const gen1checkbox = document.querySelector('#Gen1checkbox');
-// genIcheckbox.addEventListener('click', function () {
-//     genChecker['GenI']['checkedStatus'] = this.checked;
-//     resetButSaveTeams();
-// })
 const gen2checkbox = document.querySelector('#Gen2checkbox');
-// genIIcheckbox.addEventListener('click', function () {
-//     genChecker['GenII']['checkedStatus'] = this.checked;
-//     resetButSaveTeams();
-// })
 const gen3checkbox = document.querySelector('#Gen3checkbox');
-// genIIIcheckbox.addEventListener('click', function () {
-//     genChecker['GenIII']['checkedStatus'] = this.checked;
-//     resetButSaveTeams();
-// })
 const gen4checkbox = document.querySelector('#Gen4checkbox');
-// genIVcheckbox.addEventListener('click', function () {
-//     genChecker['GenIV']['checkedStatus'] = this.checked;
-//     resetButSaveTeams();
-// })
 const gen5checkbox = document.querySelector('#Gen5checkbox');
-// genVcheckbox.addEventListener('click', function () {
-//     genChecker['GenV']['checkedStatus'] = this.checked;
-//     resetButSaveTeams();
-// })
-
-
 
 const genChecker = {
     Gen1: {
@@ -108,20 +80,18 @@ const genChecker = {
         firstPoke: 494,
         lastPoke: 649
     }
-};
-
-const allGenCheckboxes = document.querySelectorAll('.GenCheckbox');
+}
 
 
 //trying to apply click events for checkboxes with a loop
 const applyClickEventOnGenCheckboxes = () => {
-for (let i = 1; i <= 5; i++) {
-    let checkbox = document.querySelector(`#Gen${i}checkbox`);
-    checkbox.addEventListener('click', function () {
-        genChecker[`Gen${i}`]['checkedStatus'] = checkbox.checked;
-        resetButSaveTeams();
-    })
-}
+    for (let i = 1; i <= 5; i++) {
+        let checkbox = document.querySelector(`#Gen${i}checkbox`);
+        checkbox.addEventListener('click', function () {
+            genChecker[`Gen${i}`]['checkedStatus'] = checkbox.checked;
+            resetButSaveTeams();
+        })
+    }
 }
 //I DID IT!!!
 applyClickEventOnGenCheckboxes();
@@ -141,10 +111,10 @@ const generateArrayOfPossiblePokemon = () => {
             for (let i = gen['firstPoke']; i <= gen['lastPoke']; i++) {
                 possiblePokemon.push(i);
             }
-        } 
+        }
     }
     // if (customizer.FilterTypes.length > 0) {
-        //this is where you will create the new array with matching types
+    //this is where you will create the new array with matching types
 }
 
 
@@ -156,7 +126,7 @@ generateArrayOfPossiblePokemon();
 function generateRandPokeNum() {
     let num = Math.floor(Math.random() * possiblePokemon.length);
     return possiblePokemon[num];
-    }
+}
 
 
 //keeping track of what pokemon have been generated (so there are not repeats)
@@ -245,25 +215,24 @@ function generatePokemon() {
             };
         })
         let randPokeNum = generateRandPokeNum();
+        
+        //if no gens are selected (this saves us from an infinite loop)
         if (randPokeNum === undefined) {
             return console.log('Select a generation.');
-        } 
+        }
 
 
         //Normal or shiny?
-        if (!customizer.Shiny) {
-            randPokeImg.src = `${baseURL}${randPokeNum}.png`;
-            while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-                randPokeNum = generateRandPokeNum();
-                randPokeImg.src = `${baseURL}${randPokeNum}.png`;
-            }
-        } else {
-            randPokeImg.src = `${baseURLshiny}${randPokeNum}.png`;
-            while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-                randPokeNum = generateRandPokeNum();
-                randPokeImg.src = `${baseURLshiny}${randPokeNum}.png`;
-            }
+        let spriteURL = baseURL;
+        if (customizer.Shiny) {
+            spriteURL = baseURLshiny;
         }
+        randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
+            while (generatedPokemon.indexOf(randPokeNum) !== -1) {
+                randPokeNum = generateRandPokeNum();
+                randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
+            }
+        
         //adding the pokemon to the container to be chosen from
         generatedPokemon.push(randPokeNum);
         generatedPokemonContainer.append(randPokeImg);
@@ -279,7 +248,7 @@ function resetButSaveTeams() {
     generatedPokemon = [];
     newTeamHeader.innerText = 'Build a team?';
     saveTeamButton.disabled = true;
-    newTeamButton.disabled = true;   
+    newTeamButton.disabled = true;
     generateArrayOfPossiblePokemon();
     generatePokemon();
 }
@@ -289,8 +258,8 @@ function resetButSaveTeams() {
 function clearSavedTeams() {
     resetButSaveTeams();
     savedTeamsContainer.innerHTML = '';
-        generateArrayOfPossiblePokemon();        
-        generatePokemon();
+    generateArrayOfPossiblePokemon();
+    generatePokemon();
 }
 
 //saving the team
