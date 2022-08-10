@@ -98,7 +98,8 @@ applyClickEventOnGenCheckboxes();
 
 //where user customize choices are stored
 const customizer = {
-    defaultArray: [],
+    //just so that we don't run the type check when all types are being chosen from
+    defaultArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
     types: {
         1: {
             type: 'normal',
@@ -182,18 +183,24 @@ const allTypesOnButton = document.querySelector('#allTypesOn');
 const allTypesOffButton = document.querySelector('#allTypesOff');
 const typeButtons = document.querySelectorAll('.typeButton');
 
-allTypesOnButton.addEventListener('click', () => {  
-        for (let button of typeButtons) {
-            button.value = 'true';
-            button.style.backgroundColor = 'yellow';
-        }
+allTypesOnButton.addEventListener('click', () => {
+    for (let button of typeButtons) {
+        button.value = 'true';
+        button.style.backgroundColor = 'yellow';
+        customizer.types[button.name].isSelected = button.value;
+    }
+    customizer.defaultArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+    resetButSaveTeams();
 })
 
-allTypesOffButton.addEventListener('click', () => {  
-        for (let button of typeButtons) {
-            button.value = 'false';
-            button.style.backgroundColor = 'white';
-        }
+allTypesOffButton.addEventListener('click', () => {
+    for (let button of typeButtons) {
+        button.value = 'false';
+        button.style.backgroundColor = 'white';
+        customizer.types[button.name].isSelected = button.value;
+    }
+    customizer.defaultArray = [];
+    resetButSaveTeams();
 })
 
 
@@ -201,13 +208,15 @@ allTypesOffButton.addEventListener('click', () => {
 const buttonToggle = (button) => {
     button.value === 'false' ? button.value = 'true' : button.value = 'false';
     button.style.backgroundColor === 'yellow' ? button.style.backgroundColor = 'white' : button.style.backgroundColor = 'yellow';
+    customizer.types[button.name].isSelected = button.value;
 }
 
 //toggling and maintaining the array that says whether to run the type check or not
 for (let button of typeButtons) {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
         buttonToggle(button);
         button.value === 'true' ? customizer.defaultArray.push(1) : customizer.defaultArray.pop();
+        resetButSaveTeams();
     })
 }
 
@@ -239,25 +248,32 @@ const generateArrayOfPossiblePokemon = async () => {
         }
     }
     const newPossiblePokemon = [];
-    // if (defaultArray.length > 0) { 
-    //     for (let i = 0; i <= possiblePokemon.length; i++) {
-    //         const pokemon = possiblePokemon[i];
-    //         const pokemonTypes = await getPokemonTypes(pokemon);
-    //         const selectedTypes = customizer.FilterTypes;
+    //here is where we build a new array with matching types, if no type is selected or all types are selected this should be skipped entirely
+    if (customizer.defaultArray.length !== 18) {
+        const baseTypeURL = 'https://pokeapi.co/api/v2/type/';
+        for (let i = 1; i <= 18; i++) {
+            if (customizer.types[i].isSelected === 'true') {
+                const apiData = await axios.get(`${baseTypeURL}${i}`);
+                console.log(apiData);
+                for (let j = 0; j < apiData.data.pokemon.length; j++) {
+                    const pokeURL = apiData.data.pokemon[j].pokemon.url;
+    
+                    const pokeURLnumber = Number(pokeURL.match(/[^v\/]\d+/g));
 
-    //         if (selectedTypes.indexOf(pokemonTypes[0]) !== -1 || selectedTypes.indexOf(pokemonTypes[1]) !== -1) {
-    //             newPossiblePokemon.push(pokemon);
-    //         }
-    //     }
-    // }
-    if (newPossiblePokemon.length > 0) {
-        possiblePokemon = newPossiblePokemon;
+                    if (possiblePokemon.indexOf(pokeURLnumber) !== -1 && newPossiblePokemon.indexOf(pokeURLnumber[0] === -1)) {
+                        newPossiblePokemon.push(pokeURLnumber);
+                    }
+                }
+            }
+        }
+        console.log(newPossiblePokemon);
         return newPossiblePokemon;
     }
+
     return possiblePokemon;
 }
 
-//saving that array of possible Pokemon as a variable?
+//saving the array of possible Pokemon as a variable, just have to await the variable within an async function
 let possiblePokemonArr = generateArrayOfPossiblePokemon();
 
 async function generateRandPokeNum() {
@@ -369,7 +385,6 @@ async function generatePokemon() {
 }
 
 
-
 //reset functions
 async function resetButSaveTeams() {
     generatedPokemonContainer.innerHTML = '';
@@ -378,6 +393,7 @@ async function resetButSaveTeams() {
     newTeamHeader.innerText = 'Build a team?';
     saveTeamButton.disabled = true;
     newTeamButton.disabled = true;
+    possiblePokemonArr = await generateArrayOfPossiblePokemon();
     await generatePokemon();
 }
 
@@ -386,7 +402,6 @@ async function resetButSaveTeams() {
 async function clearSavedTeams() {
     await resetButSaveTeams();
     savedTeamsContainer.innerHTML = '';
-    await generatePokemon();
 }
 
 //saving the team
