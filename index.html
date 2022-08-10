@@ -12,17 +12,21 @@
 
 <body>
     <section id="generatedPokemonContainer"></section>
+
     <div>
         <h2 id="newTeamHeader">Build a new team?</h2>
         <section id="newTeamContainer"></section>
+
         <button id="saveTeam">Save Team</button>
         <button id="clearTeam">Scrap Team</button>
         <button id="shinyButton">Shinies?</button>
+
         <div id="slideContainer">
             <label for="chooseFrom">Choose from <span id="sliderDisplayNum">4</span> Pokemans</label>
             <input name="chooseFrom" type="range" min="2" max="10" value="4" id="slider">
-          </div>
-          <form id="genCheckboxesContainer">
+        </div>
+
+        <form id="genCheckboxesContainer">
             <div>
                 <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI" id="Gen1checkbox">
                 <label for="genI">Gen I</label>
@@ -32,7 +36,8 @@
                 <label for="genII">Gen II</label>
             </div>
             <div>
-                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII" id="Gen3checkbox">
+                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII"
+                    id="Gen3checkbox">
                 <label for="genIII">Gen III</label>
             </div>
             <div>
@@ -44,8 +49,10 @@
                 <label for="genV">Gen V</label>
             </div>
         </form>
+
         <button id="allTypesOn">All Types On</button>
         <button id="allTypesOff">All Types Off</button>
+
         <div id="typeButtons">
             <button name="1" value="false" class="typeButton" id="normal">Normal</button>
             <button name="2" value="false" class="typeButton" id="fighting">Fighting</button>
@@ -66,13 +73,16 @@
             <button name="17" value="false" class="typeButton" id="dark">Dark</button>
             <button name="18" value="false" class="typeButton" id="fairy">Fairy</button>
         </div>
+
         <h2 id="savedTeamsHeader">Your Teams</h2>
         <section id="savedTeamsContainer"></section>
         <button id="clearTeamsButton">Clear Teams</button>
+
         <div id="jokeTwoTellsAJoke">
             <p id="theJoke"></p>
-        <img id="jokeTwo" src="ClassicSprites/150.png" alt="Mewtwo telling a joke.">
+            <img id="jokeTwo" src="ClassicSprites/150.png" alt="Mewtwo telling a joke.">
         </div>
+
     </div>
 
     <script src="app.js"></script>

@@ -32,11 +32,8 @@ jokeTwo.addEventListener('click', () => {
     newJoke();
 });
 
-
 //making the first joke
 newJoke();
-
-
 
 
 
@@ -44,61 +41,54 @@ newJoke();
 const generatedPokemonContainer = document.querySelector('#generatedPokemonContainer');
 const baseURL = 'ClassicSprites/';
 const baseURLshiny = 'Shinies/';
+//keeping track of what pokemon have been generated (so there are not repeats)
+let generatedPokemon = [];
 
 
-//handling the checkboxes (can I do this part with a loop?)
-const gen1checkbox = document.querySelector('#Gen1checkbox');
-const gen2checkbox = document.querySelector('#Gen2checkbox');
-const gen3checkbox = document.querySelector('#Gen3checkbox');
-const gen4checkbox = document.querySelector('#Gen4checkbox');
-const gen5checkbox = document.querySelector('#Gen5checkbox');
-
+//the generations
 const genChecker = {
     Gen1: {
-        checkedStatus: gen1checkbox.checked,
+        checkedStatus: document.querySelector('#Gen1checkbox').checked,
         firstPoke: 1,
         lastPoke: 151
     },
     Gen2: {
-        checkedStatus: gen2checkbox.checked,
+        checkedStatus: document.querySelector('#Gen2checkbox').checked,
         firstPoke: 152,
         lastPoke: 251
     },
     Gen3: {
-        checkedStatus: gen3checkbox.checked,
+        checkedStatus: document.querySelector('#Gen3checkbox').checked,
         firstPoke: 252,
         lastPoke: 386
     },
     Gen4: {
-        checkedStatus: gen4checkbox.checked,
+        checkedStatus: document.querySelector('#Gen4checkbox').checked,
         firstPoke: 387,
         lastPoke: 493
     },
     Gen5: {
-        checkedStatus: gen5checkbox.checked,
+        checkedStatus: document.querySelector('#Gen5checkbox').checked,
         firstPoke: 494,
         lastPoke: 649
     }
 }
 
 
-//trying to apply click events for checkboxes with a loop
-const applyClickEventOnGenCheckboxes = () => {
-    for (let i = 1; i <= 5; i++) {
-        let checkbox = document.querySelector(`#Gen${i}checkbox`);
-        checkbox.addEventListener('click', function () {
-            genChecker[`Gen${i}`]['checkedStatus'] = checkbox.checked;
-            resetButSaveTeams();
-        })
-    }
+//applying click events for gen checkboxes
+for (let i = 1; i <= 5; i++) {
+    let checkbox = document.querySelector(`#Gen${i}checkbox`);
+    checkbox.addEventListener('click', function () {
+        genChecker[`Gen${i}`]['checkedStatus'] = checkbox.checked;
+        resetButSaveTeams();
+    })
 }
-//I DID IT!!!
-applyClickEventOnGenCheckboxes();
 
 
 //where user customize choices are stored
 const customizer = {
-    //just so that we don't run the type check when all types are being chosen from
+
+    //just so that we don't run the type check when all types are being chosen from (the numbers mean nothing except that there are 18 types so I counted up to 18 to make that easy to see)
     defaultArray: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     types: {
         1: {
@@ -203,7 +193,6 @@ allTypesOffButton.addEventListener('click', () => {
     resetButSaveTeams();
 })
 
-
 //will flip the value on our type buttons
 const buttonToggle = (button) => {
     button.value === 'false' ? button.value = 'true' : button.value = 'false';
@@ -211,7 +200,7 @@ const buttonToggle = (button) => {
     customizer.types[button.name].isSelected = button.value;
 }
 
-//toggling and maintaining the array that says whether to run the type check or not
+//click event for toggling buttons and altering the array that says whether to run the type check or not
 for (let button of typeButtons) {
     button.addEventListener('click', function () {
         buttonToggle(button);
@@ -219,22 +208,6 @@ for (let button of typeButtons) {
         resetButSaveTeams();
         console.log(customizer.defaultArray.length)
     })
-}
-
-
-//returns array of types of a pokemon 
-const getPokemonTypes = async (pokeNum) => {
-    try {
-        const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeNum}`);
-        const types = [];
-        types.push(pokeData.data.types[0].type.name);
-        if (pokeData.data.types[1]) {
-            types.push(pokeData.data.types[1].type.name);
-        };
-        return types;
-    } catch (e) {
-        return e;
-    }
 }
 
 
@@ -248,7 +221,7 @@ const generateArrayOfPossiblePokemon = async () => {
             }
         }
     }
-    
+
     //if anything but all types are selected, do a type 'filter' by building a new array of possible pokemon
     if (customizer.defaultArray.length !== 18) {
         const newPossiblePokemon = [];
@@ -288,10 +261,6 @@ async function generateRandPokeNum() {
 }
 
 
-//keeping track of what pokemon have been generated (so there are not repeats)
-let generatedPokemon = [];
-
-
 //disabling save team button until team is full
 const saveTeamButton = document.querySelector('#saveTeam');
 saveTeamButton.disabled = true;
@@ -311,6 +280,27 @@ clearTeamsBtn.style.visibility = 'hidden';
 clearTeamsBtn.addEventListener('click', () => {
     savedTeamsContainer.innerHTML = '';
     clearTeamsBtn.style.visibility = 'hidden';
+})
+
+//saving the team - include option to name team?
+const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
+
+saveTeamButton.addEventListener('click', function () {
+    const newSavedTeam = document.createElement('ul');
+    for (const listItem of newTeamList.querySelectorAll('li')) {
+        newSavedTeam.append(listItem.querySelector('img'));
+    }
+    savedTeamsContainer.append(newSavedTeam);
+    savedTeamsHeader.style.visibility = 'visible';
+    clearTeamsBtn.style.visibility = 'visible';
+    resetButSaveTeams();
+});
+
+//Activating shinies button
+const shinyButton = document.querySelector('#shinyButton');
+shinyButton.addEventListener('click', function () {
+    this.innerText === 'Shinies?' ? this.innerText = 'Shinies!' : this.innerText = 'Shinies?';
+    !!customizer.Shiny ? customizer.Shiny = false : customizer.Shiny = true;
 })
 
 
@@ -335,20 +325,12 @@ chooseFromSlider.addEventListener('change', function () {
 
 
 
-
-//Activating shinies button
-const shinyButton = document.querySelector('#shinyButton');
-shinyButton.addEventListener('click', function () {
-    this.innerText === 'Shinies?' ? this.innerText = 'Shinies!' : this.innerText = 'Shinies?';
-    !!customizer.Shiny ? customizer.Shiny = false : customizer.Shiny = true;
-})
-
 //making a ul for the first team
 let newTeamList = document.createElement('ul');
 const newTeamContainer = document.querySelector('#newTeamContainer');
 newTeamContainer.append(newTeamList);
 
-//random Pokemon generator
+//random Pokemon (sprite in a list item) generator
 async function generatePokemon() {
     //generating the Pokemon
     for (let i = 1; i <= sliderValue; i++) {
@@ -404,7 +386,7 @@ async function generatePokemon() {
 }
 
 
-//reset functions
+//the reset function
 async function resetButSaveTeams() {
     generatedPokemonContainer.innerHTML = '';
     newTeamList.innerHTML = '';
@@ -415,22 +397,6 @@ async function resetButSaveTeams() {
     possiblePokemonArr = await generateArrayOfPossiblePokemon();
     await generatePokemon();
 }
-
-
-//saving the team - include option to name team?
-const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
-
-saveTeamButton.addEventListener('click', function () {
-    const newSavedTeam = document.createElement('ul');
-    for (const listItem of newTeamList.querySelectorAll('li')) {
-        newSavedTeam.append(listItem.querySelector('img'));
-    }
-    savedTeamsContainer.append(newSavedTeam);
-    savedTeamsHeader.style.visibility = 'visible';
-    clearTeamsBtn.style.visibility = 'visible';
-    resetButSaveTeams();
-});
-
 
 //generating the first set!
 generatePokemon();
