@@ -98,9 +98,119 @@ applyClickEventOnGenCheckboxes();
 
 //where user customize choices are stored
 const customizer = {
-    FilterTypes: ['water', 'grass', 'fire'],
+    defaultArray: [],
+    types: {
+        1: {
+            type: 'normal',
+            isSelected: document.querySelector('#normal').value
+        },
+        2: {
+            type: 'fighting',
+            isSelected: document.querySelector('#fighting').value
+        },
+        3: {
+            type: 'flying',
+            isSelected: document.querySelector('#flying').value
+        },
+        4: {
+            type: 'poison',
+            isSelected: document.querySelector('#poison').value
+        },
+        5: {
+            type: 'ground',
+            isSelected: document.querySelector('#ground').value
+        },
+        6: {
+            type: 'rock',
+            isSelected: document.querySelector('#rock').value
+        },
+        7: {
+            type: 'bug',
+            isSelected: document.querySelector('#bug').value
+        },
+        8: {
+            type: 'ghost',
+            isSelected: document.querySelector('#ghost').value
+        },
+        9: {
+            type: 'steel',
+            isSelected: document.querySelector('#steel').value
+        },
+        10: {
+            type: 'fire',
+            isSelected: document.querySelector('#fire').value
+        },
+        11: {
+            type: 'water',
+            isSelected: document.querySelector('#water').value
+        },
+        12: {
+            type: 'grass',
+            isSelected: document.querySelector('#grass').value
+        },
+        13: {
+            type: 'electric',
+            isSelected: document.querySelector('#electric').value
+        },
+        14: {
+            type: 'psychic',
+            isSelected: document.querySelector('#psychic').value
+        },
+        15: {
+            type: 'ice',
+            isSelected: document.querySelector('#ice').value
+        },
+        16: {
+            type: 'dragon',
+            isSelected: document.querySelector('#dragon').value
+        },
+        17: {
+            type: 'dark',
+            isSelected: document.querySelector('#dark').value
+        },
+        18: {
+            type: 'fairy',
+            isSelected: document.querySelector('#fairy').value
+        }
+    },
     Shiny: false
 }
+
+
+//the type buttons
+const allTypesOnButton = document.querySelector('#allTypesOn');
+const allTypesOffButton = document.querySelector('#allTypesOff');
+const typeButtons = document.querySelectorAll('.typeButton');
+
+allTypesOnButton.addEventListener('click', () => {  
+        for (let button of typeButtons) {
+            button.value = 'true';
+            button.style.backgroundColor = 'yellow';
+        }
+})
+
+allTypesOffButton.addEventListener('click', () => {  
+        for (let button of typeButtons) {
+            button.value = 'false';
+            button.style.backgroundColor = 'white';
+        }
+})
+
+
+//will flip the value on our type buttons
+const buttonToggle = (button) => {
+    button.value === 'false' ? button.value = 'true' : button.value = 'false';
+    button.style.backgroundColor === 'yellow' ? button.style.backgroundColor = 'white' : button.style.backgroundColor = 'yellow';
+}
+
+//toggling and maintaining the array that says whether to run the type check or not
+for (let button of typeButtons) {
+    button.addEventListener('click', function() {
+        buttonToggle(button);
+        button.value === 'true' ? customizer.defaultArray.push(1) : customizer.defaultArray.pop();
+    })
+}
+
 
 //returns array of types of a pokemon 
 const getPokemonTypes = async (pokeNum) => {
@@ -129,18 +239,17 @@ const generateArrayOfPossiblePokemon = async () => {
         }
     }
     const newPossiblePokemon = [];
-    if (customizer.FilterTypes.length > 0) { 
-        for (let i = 0; i <= 8; i++) {
-            const pokemon = possiblePokemon[i];
-            const pokemonTypes = await getPokemonTypes(pokemon);
-            const selectedTypes = customizer.FilterTypes;
+    // if (defaultArray.length > 0) { 
+    //     for (let i = 0; i <= possiblePokemon.length; i++) {
+    //         const pokemon = possiblePokemon[i];
+    //         const pokemonTypes = await getPokemonTypes(pokemon);
+    //         const selectedTypes = customizer.FilterTypes;
 
-            if (selectedTypes.indexOf(pokemonTypes[0]) !== -1 || selectedTypes.indexOf(pokemonTypes[1]) !== -1) {
-                newPossiblePokemon.push(pokemon);
-            }
-        }
-    }
-    console.log(newPossiblePokemon.length)
+    //         if (selectedTypes.indexOf(pokemonTypes[0]) !== -1 || selectedTypes.indexOf(pokemonTypes[1]) !== -1) {
+    //             newPossiblePokemon.push(pokemon);
+    //         }
+    //     }
+    // }
     if (newPossiblePokemon.length > 0) {
         possiblePokemon = newPossiblePokemon;
         return newPossiblePokemon;
@@ -231,7 +340,7 @@ async function generatePokemon() {
                 }
             }
             if (newTeamList.childElementCount < 6) {
-               generatePokemon();
+                generatePokemon();
             };
         })
         let randPokeNum = await generateRandPokeNum();
@@ -275,9 +384,9 @@ async function resetButSaveTeams() {
 
 //put this on a clear all teams button
 async function clearSavedTeams() {
-   await resetButSaveTeams();
+    await resetButSaveTeams();
     savedTeamsContainer.innerHTML = '';
-   await generatePokemon();
+    await generatePokemon();
 }
 
 //saving the team
