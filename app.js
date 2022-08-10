@@ -99,7 +99,7 @@ applyClickEventOnGenCheckboxes();
 //where user customize choices are stored
 const customizer = {
     //just so that we don't run the type check when all types are being chosen from
-    defaultArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
+    defaultArray: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     types: {
         1: {
             type: 'normal',
@@ -189,7 +189,7 @@ allTypesOnButton.addEventListener('click', () => {
         button.style.backgroundColor = 'yellow';
         customizer.types[button.name].isSelected = button.value;
     }
-    customizer.defaultArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
+    customizer.defaultArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
     resetButSaveTeams();
 })
 
@@ -217,6 +217,7 @@ for (let button of typeButtons) {
         buttonToggle(button);
         button.value === 'true' ? customizer.defaultArray.push(1) : customizer.defaultArray.pop();
         resetButSaveTeams();
+        console.log(customizer.defaultArray.length)
     })
 }
 
@@ -247,17 +248,19 @@ const generateArrayOfPossiblePokemon = async () => {
             }
         }
     }
-    const newPossiblePokemon = [];
-    //here is where we build a new array with matching types, if no type is selected or all types are selected this should be skipped entirely
+    
+    //if anything but all types are selected, do a type 'filter' by building a new array of possible pokemon
     if (customizer.defaultArray.length !== 18) {
+        const newPossiblePokemon = [];
         const baseTypeURL = 'https://pokeapi.co/api/v2/type/';
+
         for (let i = 1; i <= 18; i++) {
             if (customizer.types[i].isSelected === 'true') {
                 const apiData = await axios.get(`${baseTypeURL}${i}`);
                 console.log(apiData);
                 for (let j = 0; j < apiData.data.pokemon.length; j++) {
                     const pokeURL = apiData.data.pokemon[j].pokemon.url;
-    
+
                     const pokeURLnumber = Number(pokeURL.match(/[^v\/]\d+/g));
 
                     if (possiblePokemon.indexOf(pokeURLnumber) !== -1 && newPossiblePokemon.indexOf(pokeURLnumber[0] === -1)) {
@@ -276,6 +279,8 @@ const generateArrayOfPossiblePokemon = async () => {
 //saving the array of possible Pokemon as a variable, just have to await the variable within an async function
 let possiblePokemonArr = generateArrayOfPossiblePokemon();
 
+
+//generating a random number for a pokemon
 async function generateRandPokeNum() {
     const arr = await possiblePokemonArr;
     let num = Math.floor(Math.random() * arr.length);
@@ -298,6 +303,15 @@ newTeamButton.addEventListener('click', function () {
     resetButSaveTeams();
 });
 newTeamButton.disabled = true;
+
+
+//clear teams button
+const clearTeamsBtn = document.querySelector('#clearTeamsButton');
+clearTeamsBtn.style.visibility = 'hidden';
+clearTeamsBtn.addEventListener('click', () => {
+    savedTeamsContainer.innerHTML = '';
+    clearTeamsBtn.style.visibility = 'hidden';
+})
 
 
 //having header hidden while empty
@@ -339,7 +353,8 @@ async function generatePokemon() {
     //generating the Pokemon
     for (let i = 1; i <= sliderValue; i++) {
         let randPokeImg = document.createElement('img');
-        //giving each sprite a click event that puts them on the new team list and clears the container of generated pokemon
+
+        //giving sprites a click event that puts them on the new team list and clears the container of generated pokemon
         randPokeImg.addEventListener('click', function () {
             const chosenPoke = document.createElement('li');
             chosenPoke.append(randPokeImg);
@@ -350,28 +365,32 @@ async function generatePokemon() {
             if (newTeamList.childElementCount === 6) {
                 saveTeamButton.disabled = false;
                 newTeamHeader.innerText = 'Sexy!!!';
-                //attempting to remove click event - success!!
-                for (const listItem of newTeamList.querySelectorAll('li')) {
-                    listItem.querySelector('img').replaceWith(listItem.querySelector('img').cloneNode());
-                }
             }
             if (newTeamList.childElementCount < 6) {
                 generatePokemon();
             };
+
+            //remove click events from selected pokemon
+            for (const listItem of newTeamList.querySelectorAll('li')) {
+                listItem.querySelector('img').replaceWith(listItem.querySelector('img').cloneNode());
+            }
         })
+
+        //getting first pokemon
         let randPokeNum = await generateRandPokeNum();
 
-        //if no gens are selected (this saves us from an infinite loop)
+        //if no gens are selected, we cannot get a number. (this saves us from an infinite loop)
         if (randPokeNum === undefined) {
             return console.log('Select a generation.');
         }
-
 
         //Normal or shiny?
         let spriteURL = baseURL;
         if (customizer.Shiny) {
             spriteURL = baseURLshiny;
         }
+
+        //making a new pokemon if it has been generated before (avoiding duplicates)
         randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
         while (generatedPokemon.indexOf(randPokeNum) !== -1) {
             randPokeNum = await generateRandPokeNum();
@@ -398,15 +417,9 @@ async function resetButSaveTeams() {
 }
 
 
-//put this on a clear all teams button
-async function clearSavedTeams() {
-    await resetButSaveTeams();
-    savedTeamsContainer.innerHTML = '';
-}
-
-//saving the team
-//could include option to name team
+//saving the team - include option to name team?
 const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
+
 saveTeamButton.addEventListener('click', function () {
     const newSavedTeam = document.createElement('ul');
     for (const listItem of newTeamList.querySelectorAll('li')) {
@@ -414,12 +427,12 @@ saveTeamButton.addEventListener('click', function () {
     }
     savedTeamsContainer.append(newSavedTeam);
     savedTeamsHeader.style.visibility = 'visible';
+    clearTeamsBtn.style.visibility = 'visible';
     resetButSaveTeams();
 });
 
 
-
-//generate first set
+//generating the first set!
 generatePokemon();
 
 
