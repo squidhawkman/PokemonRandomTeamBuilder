@@ -285,7 +285,9 @@ clearTeamsBtn.addEventListener('click', () => {
 const savedTeamsContainer = document.querySelector('#savedTeamsContainer');
 
 saveTeamButton.addEventListener('click', function () {
+    newJoke();
     const newSavedTeam = document.createElement('ul');
+    newSavedTeam.classList.add('savedTeamsStyle');
     for (const listItem of newTeamList.querySelectorAll('li')) {
         newSavedTeam.append(listItem.querySelector('img'));
     }
@@ -326,6 +328,7 @@ chooseFromSlider.addEventListener('change', function () {
 
 //making a ul for the first team
 let newTeamList = document.createElement('ul');
+newTeamList.classList.add('newTeamStyle')
 const newTeamContainer = document.querySelector('#newTeamContainer');
 newTeamContainer.append(newTeamList);
 
@@ -341,11 +344,11 @@ async function generatePokemon() {
             chosenPoke.append(randPokeImg);
             newTeamList.append(chosenPoke);
             generatedPokemonContainer.innerHTML = '';
-            newTeamHeader.innerText = 'New Team';
+            newTeamHeader.innerText = '"Another one."';
             newTeamButton.disabled = false;
             if (newTeamList.childElementCount === 6) {
                 saveTeamButton.disabled = false;
-                newTeamHeader.innerText = 'Sexy!!!';
+                newTeamHeader.innerText = 'Sexy!';
             }
             if (newTeamList.childElementCount < 6) {
                 generatePokemon();
@@ -395,7 +398,7 @@ function resetButSaveTeams() {
     generatedPokemonContainer.innerHTML = '';
     newTeamList.innerHTML = '';
     generatedPokemon = [];
-    newTeamHeader.innerText = 'Build a team?';
+    newTeamHeader.innerText = 'Build a sick team?';
     saveTeamButton.disabled = true;
     newTeamButton.disabled = true;
     possiblePokemonArr = generateArrayOfPossiblePokemon();

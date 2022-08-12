@@ -1,4 +1,85 @@
+html {
+    background-color: rgb(53, 64, 110);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border: none;
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border: none;
+}
+
+section {
+    background-color: rgb(53, 64, 110);
+    margin: none;
+    border: none;
+}
+
+div {
+    background-color: rgb(53, 64, 110);
+    color:rgb(240, 239, 244);
+}
+
+h2 {
+    color: rgb(240, 239, 244);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1 {
+    background-color: rgb(53, 64, 110);
+    color: rgb(240, 239, 244);
+    margin: none;
+}
+
+p {
+    color:rgb(240, 239, 244);
+}
+
+
 ul li{
     list-style: none;
     display: inline;
+}
+
+.newTeamStyle {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.savedTeamsStyle {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: rgb(131, 174, 204);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+button {
+    border-radius: 5px;
+}
+
+#genCheckboxesContainer {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#genCheckboxesContainer div {
+text-align: center;
+color:rgb(240, 239, 244);
+}
+
+
+#typeButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 6px 6px;
+}
+
+#typeOnOffButtonContainer {
+    width: 60%;
 }

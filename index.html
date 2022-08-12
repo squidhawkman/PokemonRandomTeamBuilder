@@ -5,78 +5,95 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Pokemon Sprites</title>
 </head>
 
 <body>
-    <section id="generatedPokemonContainer"></section>
+    <!-- <h1 class="fs-2">Random Pokemon Team Builder For Real Pokemon Team Builders And Lovers, Real Gamers</h1> -->
+    <section id="generatedPokemonContainer" class="d-flex justify-content-center py-4"></section>
 
-    <div>
-        <h2 id="newTeamHeader">Build a new team?</h2>
+    <div class="d-flex justify-content-center flex-column justify-items-center align-items-center">
+        <h2 id="newTeamHeader">Build a sick team?</h2>
         <section id="newTeamContainer"></section>
 
-        <button id="saveTeam">Save Team</button>
-        <button id="clearTeam">Scrap Team</button>
-        <button id="shinyButton">Shinies?</button>
+        <div class="pb-3">
+        <button id="saveTeam">Save this sick team.</button>
+        <button id="clearTeam">Scrap this sick team.</button>
+    </div>
 
-        <div id="slideContainer">
-            <label for="chooseFrom">Choose from <span id="sliderDisplayNum">4</span> Pokemans</label>
-            <input name="chooseFrom" type="range" min="2" max="10" value="4" id="slider">
-        </div>
+        <section id="Customizer" class="d-flex justify-content-center flex-column align-items-center pb-3">
 
-        <form id="genCheckboxesContainer">
-            <div>
-                <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI" id="Gen1checkbox">
-                <label for="genI">Gen I</label>
-            </div>
-            <div>
-                <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII" id="Gen2checkbox">
-                <label for="genII">Gen II</label>
-            </div>
-            <div>
-                <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII"
-                    id="Gen3checkbox">
-                <label for="genIII">Gen III</label>
-            </div>
-            <div>
-                <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV" id="Gen4checkbox">
-                <label for="genIV">Gen IV</label>
-            </div>
-            <div>
-                <input checked="true" value="GenV" class="GenCheckbox" type="checkbox" name="genV" id="Gen5checkbox">
-                <label for="genV">Gen V</label>
-            </div>
-        </form>
+                <form class="pb-3 w-75" id="genCheckboxesContainer">
+                    <div>
+                        <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI"
+                            id="Gen1checkbox">
+                        <label for="genI">Gen I</label>
+                    </div>
+                    <div>
+                        <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII"
+                            id="Gen2checkbox">
+                        <label for="genII">Gen II</label>
+                    </div>
+                    <div>
+                        <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII"
+                            id="Gen3checkbox">
+                        <label for="genIII">Gen III</label>
+                    </div>
+                    <div>
+                        <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV"
+                            id="Gen4checkbox">
+                        <label for="genIV">Gen IV</label>
+                    </div>
+                    <div>
+                        <input checked="true" value="GenV" class="GenCheckbox" type="checkbox" name="genV"
+                            id="Gen5checkbox">
+                        <label for="genV">Gen V</label>
+                    </div>
+                </form>
 
-        <button id="allTypesOn">All Types On</button>
-        <button id="allTypesOff">All Types Off</button>
+            <div id="typeOnOffButtonContainer" class="d-flex justify-content-around pb-3">
+                <button id="allTypesOn">All Types On</button>
+                <button id="allTypesOff">All Types Off</button>
+            </div>
 
-        <div id="typeButtons">
-            <button name="1" value="false" class="typeButton" id="normal">Normal</button>
-            <button name="2" value="false" class="typeButton" id="fighting">Fighting</button>
-            <button name="3" value="false" class="typeButton" id="flying">Flying</button>
-            <button name="4" value="false" class="typeButton" id="poison">Poison</button>
-            <button name="5" value="false" class="typeButton" id="ground">Ground</button>
-            <button name="6" value="false" class="typeButton" id="rock">Rock</button>
-            <button name="7" value="false" class="typeButton" id="bug">Bug</button>
-            <button name="8" value="false" class="typeButton" id="ghost">Ghost</button>
-            <button name="9" value="false" class="typeButton" id="steel">Steel</button>
-            <button name="10" value="false" class="typeButton" id="fire">Fire</button>
-            <button name="11" value="false" class="typeButton" id="water">Water</button>
-            <button name="12" value="false" class="typeButton" id="grass">Grass</button>
-            <button name="13" value="false" class="typeButton" id="electric">Electric</button>
-            <button name="14" value="false" class="typeButton" id="psychic">Psychic</button>
-            <button name="15" value="false" class="typeButton" id="ice">Ice</button>
-            <button name="16" value="false" class="typeButton" id="dragon">Dragon</button>
-            <button name="17" value="false" class="typeButton" id="dark">Dark</button>
-            <button name="18" value="false" class="typeButton" id="fairy">Fairy</button>
-        </div>
+            <div id="typeButtons" class="px-3 pb-3">
+                <button name="1" value="false" class="typeButton" id="normal">Normal</button>
+                <button name="2" value="false" class="typeButton" id="fighting">Fighting</button>
+                <button name="3" value="false" class="typeButton" id="flying">Flying</button>
+                <button name="4" value="false" class="typeButton" id="poison">Poison</button>
+                <button name="5" value="false" class="typeButton" id="ground">Ground</button>
+                <button name="6" value="false" class="typeButton" id="rock">Rock</button>
+                <button name="7" value="false" class="typeButton" id="bug">Bug</button>
+                <button name="8" value="false" class="typeButton" id="ghost">Ghost</button>
+                <button name="9" value="false" class="typeButton" id="steel">Steel</button>
+                <button name="10" value="false" class="typeButton" id="fire">Fire</button>
+                <button name="11" value="false" class="typeButton" id="water">Water</button>
+                <button name="12" value="false" class="typeButton" id="grass">Grass</button>
+                <button name="13" value="false" class="typeButton" id="electric">Electric</button>
+                <button name="14" value="false" class="typeButton" id="psychic">Psychic</button>
+                <button name="15" value="false" class="typeButton" id="ice">Ice</button>
+                <button name="16" value="false" class="typeButton" id="dragon">Dragon</button>
+                <button name="17" value="false" class="typeButton" id="dark">Dark</button>
+                <button name="18" value="false" class="typeButton" id="fairy">Fairy</button>
+            </div>
 
-        <h2 id="savedTeamsHeader">Your Teams</h2>
+            <div id="slideContainer" class="pb-3">
+                <label for="chooseFrom">Choose from <span id="sliderDisplayNum">4</span> Pokemans</label>
+                <input name="chooseFrom" type="range" min="2" max="10" value="4" id="slider">
+            </div>
+
+            <div id="shinyButtonContainer">
+                <button id="shinyButton">Shinies?</button>
+            </div>
+        </section>
+
+        <h2 id="savedTeamsHeader">Sick Teams Bruh</h2>
         <section id="savedTeamsContainer"></section>
-        <button id="clearTeamsButton">Clear Teams</button>
+        <button class="mb-3" id="clearTeamsButton">Clear Teams</button>
 
         <div id="jokeTwoTellsAJoke">
             <p id="theJoke"></p>
