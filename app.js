@@ -207,7 +207,7 @@ for (let button of typeButtons) {
     button.addEventListener('click', function () {
         buttonToggle(button);
         button.value === 'true' ? customizer.defaultArray.push(1) : customizer.defaultArray.pop();
-        resetButSaveTeams();
+        littleReset();
     })
 }
 
@@ -390,6 +390,14 @@ async function generatePokemon() {
         generatedPokemon.push(randPokeNum);
         generatedPokemonContainer.append(randPokeImg);
     }
+}
+
+//not resetting the building team when picking type
+function littleReset() {
+    generatedPokemonContainer.innerHTML = '';
+    generatedPokemon = [];
+    possiblePokemonArr = generateArrayOfPossiblePokemon();
+    generatePokemon();
 }
 
 
