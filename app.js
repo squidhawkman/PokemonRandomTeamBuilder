@@ -43,6 +43,8 @@ const baseURL = 'ClassicSprites/';
 const baseURLshiny = 'Shinies/';
 //keeping track of what pokemon have been generated (so there are not repeats)
 let generatedPokemon = [];
+let possiblePokemon = [];
+let newPossiblePokemon = [];
 
 
 //the generations
@@ -206,14 +208,13 @@ for (let button of typeButtons) {
         buttonToggle(button);
         button.value === 'true' ? customizer.defaultArray.push(1) : customizer.defaultArray.pop();
         resetButSaveTeams();
-        console.log(customizer.defaultArray.length)
     })
 }
 
 
 //generating the array of possible Pokemon (to be shown as options)
 const generateArrayOfPossiblePokemon = async () => {
-    let possiblePokemon = [];
+    possiblePokemon = [];
     for (gen of Object.values(genChecker)) {
         if (gen['checkedStatus']) {
             for (let i = gen['firstPoke']; i <= gen['lastPoke']; i++) {
@@ -224,13 +225,12 @@ const generateArrayOfPossiblePokemon = async () => {
 
     //if anything but all types are selected, do a type 'filter' by building a new array of possible pokemon
     if (customizer.defaultArray.length !== 18) {
-        const newPossiblePokemon = [];
+        newPossiblePokemon = [];
         const baseTypeURL = 'https://pokeapi.co/api/v2/type/';
 
         for (let i = 1; i <= 18; i++) {
             if (customizer.types[i].isSelected === 'true') {
                 const apiData = await axios.get(`${baseTypeURL}${i}`);
-                console.log(apiData);
                 for (let j = 0; j < apiData.data.pokemon.length; j++) {
                     const pokeURL = apiData.data.pokemon[j].pokemon.url;
 
@@ -242,7 +242,6 @@ const generateArrayOfPossiblePokemon = async () => {
                 }
             }
         }
-        console.log(newPossiblePokemon);
         return newPossiblePokemon;
     }
 
@@ -268,7 +267,7 @@ saveTeamButton.disabled = true;
 
 //scrapping the team and making a new one
 const newTeamButton = document.querySelector('#clearTeam');
-newTeamButton.addEventListener('click', function () {
+newTeamButton.addEventListener('click', () => {
     resetButSaveTeams();
 });
 newTeamButton.disabled = true;
@@ -366,18 +365,23 @@ async function generatePokemon() {
             return console.log('Select a generation.');
         }
 
-        //Normal or shiny?
+        //making a new pokemon if it has been generated before (avoiding duplicates)
+        while (generatedPokemon.indexOf(randPokeNum) !== -1) {
+            randPokeNum = await generateRandPokeNum();
+
+            //this will reset the array of generatedPokemon if all possible Pokemon have been generated. This means we will generate duplicates. This happens if there are not enough Pokemon to generate without having duplicates.
+            if (generatedPokemon.length > 1 && generatedPokemon.length === possiblePokemon.length || generatedPokemon.length === newPossiblePokemon.length ) {
+                generatedPokemon = [];
+            }
+        }
+
+    
+        //Setting the image, normal or shiny?
         let spriteURL = baseURL;
         if (customizer.Shiny) {
             spriteURL = baseURLshiny;
         }
-
-        //making a new pokemon if it has been generated before (avoiding duplicates)
         randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
-        while (generatedPokemon.indexOf(randPokeNum) !== -1) {
-            randPokeNum = await generateRandPokeNum();
-            randPokeImg.src = `${spriteURL}${randPokeNum}.png`;
-        }
 
         //adding the pokemon to the container to be chosen from
         generatedPokemon.push(randPokeNum);
@@ -387,15 +391,15 @@ async function generatePokemon() {
 
 
 //the reset function
-async function resetButSaveTeams() {
+function resetButSaveTeams() {
     generatedPokemonContainer.innerHTML = '';
     newTeamList.innerHTML = '';
     generatedPokemon = [];
     newTeamHeader.innerText = 'Build a team?';
     saveTeamButton.disabled = true;
     newTeamButton.disabled = true;
-    possiblePokemonArr = await generateArrayOfPossiblePokemon();
-    await generatePokemon();
+    possiblePokemonArr = generateArrayOfPossiblePokemon();
+    generatePokemon();
 }
 
 //generating the first set!
