@@ -81,8 +81,22 @@ color:rgb(240, 239, 244);
     gap: 3px;
 }
 
+
 #typeOnOffButtonContainer {
     width: 80%;
+}
+
+
+
+#Customizer button {
+    color: rgb(24, 29, 49);
+    border: 1px rgb(24, 29, 49) solid;
+}
+
+
+#Customizer {
+    padding: 10px;
+    border-radius: 5px;
 }
 
 
