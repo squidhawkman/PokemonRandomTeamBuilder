@@ -6,50 +6,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Pokemon Sprites</title>
+    <title>Pokemon Team Builder</title>
 </head>
 
-<body>
-    <!-- <h1 class="fs-2">Random Pokemon Team Builder For Real Pokemon Team Builders And Lovers, Real Gamers</h1> -->
-    <section id="generatedPokemonContainer" class="d-flex justify-content-center py-4 flex-wrap align-items-center"></section>
+<body> 
 
     <div class="d-flex justify-content-center flex-column justify-items-center align-items-center">
+
+        <section id="generatedPokemonContainer" class="d-flex justify-content-center py-4 flex-wrap align-items-center"></section>
+
         <h2 id="newTeamHeader">Build a sick team?</h2>
+
         <section id="newTeamContainer"></section>
 
         <div class="pb-3">
-        <button id="saveTeam">Save this sick team.</button>
-        <button id="clearTeam">Scrap this sick team.</button>
-    </div>
+            <button id="saveTeam">Save this sick team.</button>
+            <button id="clearTeam">Scrap this sick team.</button>
+        </div>
 
         <section id="Customizer" class="d-flex justify-content-center flex-column align-items-center pb-3">
-
                 <form class="pb-3 w-75" id="genCheckboxesContainer">
                     <div>
-                        <input checked="true" value="GenI" class="GenCheckbox" type="checkbox" name="genI"
+                        <input checked="true" class="GenCheckbox" type="checkbox" name="genI"
                             id="Gen1checkbox">
                         <label for="genI">Gen I</label>
                     </div>
                     <div>
-                        <input checked="true" value="GenII" class="GenCheckbox" type="checkbox" name="genII"
+                        <input checked="true" class="GenCheckbox" type="checkbox" name="genII"
                             id="Gen2checkbox">
                         <label for="genII">Gen II</label>
                     </div>
                     <div>
-                        <input checked="true" value="GenIII" class="GenCheckbox" type="checkbox" name="genIII"
+                        <input checked="true" class="GenCheckbox" type="checkbox" name="genIII"
                             id="Gen3checkbox">
                         <label for="genIII">Gen III</label>
                     </div>
                     <div>
-                        <input checked="true" value="GenIV" class="GenCheckbox" type="checkbox" name="genIV"
+                        <input checked="true" class="GenCheckbox" type="checkbox" name="genIV"
                             id="Gen4checkbox">
                         <label for="genIV">Gen IV</label>
                     </div>
                     <div>
-                        <input checked="true" value="GenV" class="GenCheckbox" type="checkbox" name="genV"
+                        <input checked="true" class="GenCheckbox" type="checkbox" name="genV"
                             id="Gen5checkbox">
                         <label for="genV">Gen V</label>
                     </div>
@@ -92,14 +92,15 @@
         </section>
 
         <h2 id="savedTeamsHeader" class="pt-3">Sick Teams Bruh</h2>
+
         <section id="savedTeamsContainer"></section>
+
         <button class="mb-3" id="clearTeamsButton">Clear Teams</button>
 
         <div id="jokeTwoTellsAJoke" class="px-3">
             <p id="theJoke"></p>
             <img id="jokeTwo" src="ClassicSprites/150.png" alt="Mewtwo telling a joke.">
         </div>
-
     </div>
 
     <script src="app.js"></script>

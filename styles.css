@@ -2,6 +2,7 @@
 html {
     background-color: rgb(53, 64, 110);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+/* I think I'm supposed to set border to none but I don't know why */
     border: none;
 }
 
